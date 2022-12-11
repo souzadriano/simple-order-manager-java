@@ -2,6 +2,7 @@ package com.souzadriano.som.controllers.dtos;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 public class StockMovementCreateDTO implements Serializable {
@@ -9,6 +10,7 @@ public class StockMovementCreateDTO implements Serializable {
 	private static final long serialVersionUID = -4913343832928776890L;
 
 	@NotNull
+	@Min(1)
 	private Integer quantity;
 
 	@NotNull

@@ -51,8 +51,7 @@ public class StockMovementEntity implements Serializable {
 		super();
 	}
 
-	public StockMovementEntity(@NotNull Date creationDate, @NotNull Integer quantity, @NotNull ItemEntity item,
-			@NotNull StockMovementOperation operation) {
+	public StockMovementEntity(Date creationDate, Integer quantity, ItemEntity item, StockMovementOperation operation) {
 		super();
 		this.creationDate = creationDate;
 		this.quantity = quantity;
@@ -60,8 +59,8 @@ public class StockMovementEntity implements Serializable {
 		this.operation = operation;
 	}
 
-	public StockMovementEntity(Long stockMovementId, @NotNull Date creationDate, @NotNull Integer quantity,
-			@NotNull ItemEntity item, @NotNull StockMovementOperation operation) {
+	public StockMovementEntity(Long stockMovementId, Date creationDate, Integer quantity, ItemEntity item,
+			StockMovementOperation operation) {
 		super();
 		this.stockMovementId = stockMovementId;
 		this.creationDate = creationDate;

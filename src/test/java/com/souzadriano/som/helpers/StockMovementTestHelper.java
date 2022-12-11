@@ -35,7 +35,7 @@ public class StockMovementTestHelper {
 	@Autowired
 	private ItemTestHelper itemTestHelper;
 
-	private StockMovement createStockMovement(StockMovementCreateDTO stockMovement)
+	public StockMovement createStockMovement(StockMovementCreateDTO stockMovement)
 			throws UnsupportedEncodingException, Exception, JsonProcessingException, JsonMappingException {
 		String content = mockMvc
 				.perform(post(STOCK_MOVEMENT_PATH).contentType(MediaType.APPLICATION_JSON)

@@ -30,6 +30,8 @@ import com.souzadriano.som.helpers.ItemTestHelper;
 import com.souzadriano.som.helpers.OrderTestHelper;
 import com.souzadriano.som.helpers.UserTestHelper;
 import com.souzadriano.som.repositories.OrderRepository;
+import com.souzadriano.som.repositories.OrderStockMovementRepository;
+import com.souzadriano.som.repositories.StockMovementRepository;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -47,15 +49,23 @@ public class OrderControllerTest {
 
 	@Autowired
 	private ItemTestHelper itemTestHelper;
-	
+
 	@Autowired
 	private UserTestHelper userTestHelper;
 
 	@Autowired
 	private OrderRepository orderRepository;
+	
+	@Autowired
+	private StockMovementRepository stockMovementRepository;
+	
+	@Autowired
+	private OrderStockMovementRepository orderStockMovementRepository;
 
 	@BeforeEach
 	private void beforeEach() {
+		orderStockMovementRepository.deleteAll();
+		stockMovementRepository.deleteAll();
 		orderRepository.deleteAll();
 	}
 
@@ -77,8 +87,7 @@ public class OrderControllerTest {
 	@Test
 	public void getOne() throws Exception {
 		Order order1 = orderTestHelper.createOrder1();
-		assertThat(mockMvc
-				.perform(get(OrderTestHelper.ORDER_PATH + "/" + order1.getOrderId())) //
+		assertThat(mockMvc.perform(get(OrderTestHelper.ORDER_PATH + "/" + order1.getOrderId())) //
 				.andExpect(status().isOk()) //
 				.andExpect(jsonPath("$.orderId", is(order1.getOrderId().intValue()))) //
 				.andExpect(jsonPath("$.quantity", is(OrderTestHelper.ORDER_1_QUANTITY))) //
@@ -109,7 +118,8 @@ public class OrderControllerTest {
 		User user1 = userTestHelper.createUser1();
 		assertThat(mockMvc
 				.perform(post(OrderTestHelper.ORDER_PATH).contentType(MediaType.APPLICATION_JSON)
-						.content(objectMapper.writeValueAsString(new OrderCreateDTO(null, item1.getItemId(), user1.getUserId()))))
+						.content(objectMapper
+								.writeValueAsString(new OrderCreateDTO(null, item1.getItemId(), user1.getUserId()))))
 				.andExpect(status().is4xxClientError()) //
 		);
 	}
@@ -130,7 +140,8 @@ public class OrderControllerTest {
 		Item item1 = itemTestHelper.createItem1();
 		assertThat(mockMvc
 				.perform(post(OrderTestHelper.ORDER_PATH).contentType(MediaType.APPLICATION_JSON)
-						.content(objectMapper.writeValueAsString(new OrderCreateDTO(OrderTestHelper.ORDER_1_QUANTITY, item1.getItemId(), null))))
+						.content(objectMapper.writeValueAsString(
+								new OrderCreateDTO(OrderTestHelper.ORDER_1_QUANTITY, item1.getItemId(), null))))
 				.andExpect(status().is4xxClientError()) //
 		);
 	}
@@ -138,27 +149,21 @@ public class OrderControllerTest {
 	@Test
 	public void update() throws Exception {
 		Order order1 = orderTestHelper.createOrder1();
-		assertThat(mockMvc
-				.perform(put(OrderTestHelper.ORDER_PATH + "/" + order1.getOrderId())
-						.contentType(MediaType.APPLICATION_JSON).content("{}"))
-				.andExpect(status().is4xxClientError()) //
+		assertThat(mockMvc.perform(put(OrderTestHelper.ORDER_PATH + "/" + order1.getOrderId())
+				.contentType(MediaType.APPLICATION_JSON).content("{}")).andExpect(status().is4xxClientError()) //
 		);
 	}
 
 	@Test
 	public void deleteOrder() throws Exception {
 		Order order1 = orderTestHelper.createOrder1();
-		assertThat(mockMvc
-				.perform(
-						delete(OrderTestHelper.ORDER_PATH + "/" + order1.getOrderId()))
+		assertThat(mockMvc.perform(delete(OrderTestHelper.ORDER_PATH + "/" + order1.getOrderId()))
 				.andExpect(status().isOk()));
-		assertThat(
-				mockMvc.perform(get(OrderTestHelper.ORDER_PATH))
-						.andExpect(jsonPath("$", hasSize(1))) //
-						.andExpect(jsonPath("$[0].quantity", is(OrderTestHelper.ORDER_1_QUANTITY))) //
-						.andExpect(jsonPath("$[0].item.itemId", is(order1.getItem().getItemId().intValue()))) //
-						.andExpect(jsonPath("$[0].user.userId", is(order1.getUser().getUserId().intValue()))) //
-						.andExpect(jsonPath("$[0].status", is(OrderStatus.CANCELED.toString()))) //
+		assertThat(mockMvc.perform(get(OrderTestHelper.ORDER_PATH)).andExpect(jsonPath("$", hasSize(1))) //
+				.andExpect(jsonPath("$[0].quantity", is(OrderTestHelper.ORDER_1_QUANTITY))) //
+				.andExpect(jsonPath("$[0].item.itemId", is(order1.getItem().getItemId().intValue()))) //
+				.andExpect(jsonPath("$[0].user.userId", is(order1.getUser().getUserId().intValue()))) //
+				.andExpect(jsonPath("$[0].status", is(OrderStatus.CANCELED.toString()))) //
 		);
 	}
 

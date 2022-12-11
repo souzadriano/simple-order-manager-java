@@ -23,13 +23,17 @@ public class OrderService {
 	private OrderMapper orderMapper;
 	private ItemRepository itemRepository;
 	private UserRepository userRepository;
+	private StockManagerService stockManagerService;
+	private OrderStatusService orderStatusService;
 
 	public OrderService(OrderRepository orderRepository, OrderMapper orderMapper, ItemRepository itemRepository,
-			UserRepository userRepository) {
+			UserRepository userRepository, StockManagerService stockManagerService, OrderStatusService orderStatusService) {
 		this.orderRepository = orderRepository;
 		this.orderMapper = orderMapper;
 		this.itemRepository = itemRepository;
 		this.userRepository = userRepository;
+		this.stockManagerService = stockManagerService;
+		this.orderStatusService = orderStatusService;
 	}
 
 	public List<Order> findAll() {
@@ -41,8 +45,10 @@ public class OrderService {
 				.orElseThrow(IllegalArgumentException::new);
 		UserEntity userEntity = userRepository.findOneByUserIdAndDisabled(userId, Boolean.FALSE)
 				.orElseThrow(IllegalArgumentException::new);
-		OrderEntity entity = new OrderEntity(new Date(), quantity, OrderStatus.PENDING_STOCK, itemEntity, userEntity);
-		return orderMapper.toObject(orderRepository.save(entity));
+		OrderEntity entity = new OrderEntity(new Date(), quantity, OrderStatus.PENDING, itemEntity, userEntity);
+		OrderEntity orderSaved = orderRepository.save(entity);
+		OrderStatus status = stockManagerService.didAOrder(orderSaved);
+		return orderMapper.toObject(orderStatusService.updateStatus(orderSaved, status));
 	}
 
 	public Order findOne(Long orderId) {

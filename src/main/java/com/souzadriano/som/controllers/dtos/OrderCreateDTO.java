@@ -2,6 +2,7 @@ package com.souzadriano.som.controllers.dtos;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 public class OrderCreateDTO implements Serializable {
@@ -9,6 +10,7 @@ public class OrderCreateDTO implements Serializable {
 	private static final long serialVersionUID = 4718666837768252900L;
 
 	@NotNull
+	@Min(1)
 	private Integer quantity;
 	@NotNull
 	private Long itemId;
