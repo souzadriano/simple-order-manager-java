@@ -5,33 +5,36 @@ import java.util.Date;
 
 public class Order implements Serializable {
 
-	private static final long serialVersionUID = -7614905589181851122L;
+	private static final long serialVersionUID = 3304590687687928033L;
 
 	private Long orderId;
 	private Date creationDate;
 	private Integer quantity;
 	private Item item;
 	private User user;
+	private OrderStatus status;
 
 	public Order() {
 		super();
 	}
 
-	public Order(Date creationDate, Integer quantity, Item item, User user) {
+	public Order(Date creationDate, Integer quantity, Item item, User user, OrderStatus status) {
 		super();
 		this.creationDate = creationDate;
 		this.quantity = quantity;
 		this.item = item;
 		this.user = user;
+		this.status = status;
 	}
 
-	public Order(Long orderId, Date creationDate, Integer quantity, Item item, User user) {
+	public Order(Long orderId, Date creationDate, Integer quantity, Item item, User user, OrderStatus status) {
 		super();
 		this.orderId = orderId;
 		this.creationDate = creationDate;
 		this.quantity = quantity;
 		this.item = item;
 		this.user = user;
+		this.status = status;
 	}
 
 	public Long getOrderId() {
@@ -52,6 +55,10 @@ public class Order implements Serializable {
 
 	public User getUser() {
 		return user;
+	}
+
+	public OrderStatus getStatus() {
+		return status;
 	}
 
 }

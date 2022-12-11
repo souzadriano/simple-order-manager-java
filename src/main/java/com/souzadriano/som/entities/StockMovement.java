@@ -5,30 +5,34 @@ import java.util.Date;
 
 public class StockMovement implements Serializable {
 
-	private static final long serialVersionUID = 6712921818996046850L;
+	private static final long serialVersionUID = 1597508896145652127L;
 
 	private Long stockMovementId;
 	private Date creationDate;
 	private Integer quantity;
 	private Item item;
+	private StockMovementOperation operation;
 
 	public StockMovement() {
 		super();
 	}
 
-	public StockMovement(Date creationDate, Integer quantity, Item item) {
+	public StockMovement(Date creationDate, Integer quantity, Item item, StockMovementOperation operation) {
 		super();
 		this.creationDate = creationDate;
 		this.quantity = quantity;
 		this.item = item;
+		this.operation = operation;
 	}
 
-	public StockMovement(Long stockMovementId, Date creationDate, Integer quantity, Item item) {
+	public StockMovement(Long stockMovementId, Date creationDate, Integer quantity, Item item,
+			StockMovementOperation operation) {
 		super();
 		this.stockMovementId = stockMovementId;
 		this.creationDate = creationDate;
 		this.quantity = quantity;
 		this.item = item;
+		this.operation = operation;
 	}
 
 	public Long getStockMovementId() {
@@ -45,6 +49,10 @@ public class StockMovement implements Serializable {
 
 	public Item getItem() {
 		return item;
+	}
+
+	public StockMovementOperation getOperation() {
+		return operation;
 	}
 
 }

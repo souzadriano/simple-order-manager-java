@@ -35,6 +35,11 @@ public class ItemEntity implements Serializable {
 		super();
 	}
 
+	public ItemEntity(Long itemId) {
+		super();
+		this.itemId = itemId;
+	}
+
 	public ItemEntity(String name, Boolean disabled) {
 		super();
 		this.name = name;
