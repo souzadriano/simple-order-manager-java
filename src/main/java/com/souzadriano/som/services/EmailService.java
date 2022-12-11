@@ -43,6 +43,7 @@ public class EmailService {
 			LOG.error(e.getMessage(), e);
 			emailLogEntity.setStatus(EmailLogStatus.ERROR);
 			emailLogEntity.setLog(e.getMessage());
+			emailLogRepository.save(emailLogEntity);
 		}
 	}
 }
