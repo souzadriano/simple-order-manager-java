@@ -62,12 +62,6 @@ spring.datasource.validationQuery=SELECT 1
 
 spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
 
-spring.flyway.locations=classpath:db/migration
-spring.flyway.url=jdbc:postgresql://localhost:5432/som
-spring.flyway.user=som
-spring.flyway.password=som
-spring.flyway.driver-class-name=org.postgresql.Driver
-
 spring.mail.host=localhost
 spring.mail.port=587
 spring.mail.username=USERNAME

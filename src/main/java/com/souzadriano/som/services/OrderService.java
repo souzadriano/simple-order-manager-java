@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.souzadriano.som.entities.Order;
 import com.souzadriano.som.entities.OrderStatus;
@@ -40,6 +41,7 @@ public class OrderService {
 		return orderMapper.toObject(this.orderRepository.findAll(Sort.by("creationDate")));
 	}
 
+	@Transactional
 	public Order create(Integer quantity, Long itemId, Long userId) {
 		ItemEntity itemEntity = itemRepository.findOneByItemIdAndDisabled(itemId, Boolean.FALSE)
 				.orElseThrow(IllegalArgumentException::new);

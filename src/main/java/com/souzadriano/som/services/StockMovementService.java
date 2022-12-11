@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.souzadriano.som.entities.StockMovement;
 import com.souzadriano.som.entities.StockMovementOperation;
@@ -35,6 +36,7 @@ public class StockMovementService {
 		return stockMovementMapper.toObject(this.stockMovementRepository.findAll(Sort.by("creationDate")));
 	}
 
+	@Transactional
 	public StockMovement create(Integer quantity, Long itemId, StockMovementOperation operation) {
 		ItemEntity itemEntity = itemRepository.findOneByItemIdAndDisabled(itemId, Boolean.FALSE)
 				.orElseThrow(IllegalArgumentException::new);

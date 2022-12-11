@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.souzadriano.som.entities.OrderStatus;
 import com.souzadriano.som.entities.StockMovementOperation;
@@ -16,6 +17,7 @@ import com.souzadriano.som.repositories.OrderStockMovementRepository;
 import com.souzadriano.som.repositories.StockMovementRepository;
 
 @Service
+@Transactional
 public class StockManagerService {
 
 	private OrderRepository orderRepository;
