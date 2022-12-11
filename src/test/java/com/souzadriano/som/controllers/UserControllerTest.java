@@ -4,10 +4,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isA;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -33,11 +33,11 @@ import com.souzadriano.som.repositories.UserRepository;
 @TestPropertySource(locations = "classpath:application-test.properties")
 public class UserControllerTest {
 
-	private static final String A_USER_1_NAME = "A_USER_1";
-	private static final String A_USER_1_EMAIL = "A_USER_1@localhost";
+	private static final String USER_1_NAME = "A_USER_1";
+	private static final String USER_1_EMAIL = "A_USER_1@localhost";
 
-	private static final String A_USER_2_NAME = "A_USER_2";
-	private static final String A_USER_2_EMAIL = "A_USER_2@localhost";
+	private static final String USER_2_NAME = "A_USER_2";
+	private static final String USER_2_EMAIL = "A_USER_2@localhost";
 
 	private static final String USERS_PATH = "/users";
 
@@ -61,10 +61,10 @@ public class UserControllerTest {
 		createUser2();
 		assertThat(mockMvc.perform(get(USERS_PATH)) //
 				.andExpect(jsonPath("$", hasSize(2))) //
-				.andExpect(jsonPath("$[0].name", is(A_USER_1_NAME))) //
-				.andExpect(jsonPath("$[0].email", is(A_USER_1_EMAIL))) //
-				.andExpect(jsonPath("$[1].name", is(A_USER_2_NAME))) //
-				.andExpect(jsonPath("$[1].email", is(A_USER_2_EMAIL))) //
+				.andExpect(jsonPath("$[0].name", is(USER_1_NAME))) //
+				.andExpect(jsonPath("$[0].email", is(USER_1_EMAIL))) //
+				.andExpect(jsonPath("$[1].name", is(USER_2_NAME))) //
+				.andExpect(jsonPath("$[1].email", is(USER_2_EMAIL))) //
 		);
 	}
 
@@ -74,8 +74,8 @@ public class UserControllerTest {
 		assertThat(mockMvc.perform(get(USERS_PATH + "/" + user1.getUserId())) //
 				.andExpect(status().isOk()) //
 				.andExpect(jsonPath("$.userId", is(user1.getUserId().intValue()))) //
-				.andExpect(jsonPath("$.name", is(A_USER_1_NAME))) //
-				.andExpect(jsonPath("$.email", is(A_USER_1_EMAIL))) //
+				.andExpect(jsonPath("$.name", is(USER_1_NAME))) //
+				.andExpect(jsonPath("$.email", is(USER_1_EMAIL))) //
 		);
 	}
 
@@ -86,8 +86,35 @@ public class UserControllerTest {
 						.content(objectMapper.writeValueAsString(newUser1())))
 				.andExpect(status().isOk()) //
 				.andExpect(jsonPath("$.userId", isA(Number.class))) //
-				.andExpect(jsonPath("$.name", is(A_USER_1_NAME))) //
-				.andExpect(jsonPath("$.email", is(A_USER_1_EMAIL))) //
+				.andExpect(jsonPath("$.name", is(USER_1_NAME))) //
+				.andExpect(jsonPath("$.email", is(USER_1_EMAIL))) //
+		);
+	}
+
+	@Test
+	public void createWithEmptyName() throws Exception {
+		assertThat(mockMvc
+				.perform(post(USERS_PATH).contentType(MediaType.APPLICATION_JSON)
+						.content(objectMapper.writeValueAsString(new User("", USER_1_EMAIL))))
+				.andExpect(status().is4xxClientError()) //
+		);
+	}
+
+	@Test
+	public void createWithEmptyEmail() throws Exception {
+		assertThat(mockMvc
+				.perform(post(USERS_PATH).contentType(MediaType.APPLICATION_JSON)
+						.content(objectMapper.writeValueAsString(new User(USER_1_NAME, ""))))
+				.andExpect(status().is4xxClientError()) //
+		);
+	}
+
+	@Test
+	public void createWithWrongEmail() throws Exception {
+		assertThat(mockMvc
+				.perform(post(USERS_PATH).contentType(MediaType.APPLICATION_JSON)
+						.content(objectMapper.writeValueAsString(new User(USER_1_NAME, "ABC"))))
+				.andExpect(status().is4xxClientError()) //
 		);
 	}
 
@@ -100,8 +127,34 @@ public class UserControllerTest {
 						.content(objectMapper.writeValueAsString(userUpdate)))
 				.andExpect(status().isOk()) //
 				.andExpect(jsonPath("$.userId", is(user1.getUserId().intValue()))) //
-				.andExpect(jsonPath("$.name", is("UPDATED" + A_USER_1_NAME))) //
-				.andExpect(jsonPath("$.email", is("UPDATED" + A_USER_1_EMAIL))) //
+				.andExpect(jsonPath("$.name", is("UPDATED" + USER_1_NAME))) //
+				.andExpect(jsonPath("$.email", is("UPDATED" + USER_1_EMAIL))) //
+		);
+	}
+
+	@Test
+	public void updateWithEmptyName() throws Exception {
+		User user1 = createUser1();
+		User userUpdate = new User(user1.getUserId(), "", USER_1_EMAIL);
+		assertThat(mockMvc.perform(put(USERS_PATH + "/" + user1.getUserId()).contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(userUpdate))).andExpect(status().is4xxClientError()));
+	}
+
+	@Test
+	public void updateWithEmptyEmail() throws Exception {
+		User user1 = createUser1();
+		User userUpdate = new User(user1.getUserId(), USER_1_NAME, "");
+		assertThat(mockMvc.perform(put(USERS_PATH + "/" + user1.getUserId()).contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(userUpdate))).andExpect(status().is4xxClientError()) //
+		);
+	}
+
+	@Test
+	public void updateWithWrongEmail() throws Exception {
+		User user1 = createUser1();
+		User userUpdate = new User(user1.getUserId(), USER_1_NAME, "ABC");
+		assertThat(mockMvc.perform(put(USERS_PATH + "/" + user1.getUserId()).contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(userUpdate))).andExpect(status().is4xxClientError()) //
 		);
 	}
 
@@ -130,11 +183,11 @@ public class UserControllerTest {
 	}
 
 	private User newUser1() {
-		return new User(A_USER_1_NAME, A_USER_1_EMAIL);
+		return new User(USER_1_NAME, USER_1_EMAIL);
 	}
 
 	private User newUser2() {
-		return new User(A_USER_2_NAME, A_USER_2_EMAIL);
+		return new User(USER_2_NAME, USER_2_EMAIL);
 	}
 
 }

@@ -12,5 +12,5 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
 	public List<UserEntity> findByDisabled(Boolean disabled, Sort sort);
 	
-	public Optional<UserEntity> findOneByUserIdAndDisabled(Long id, Boolean disabled);
+	public Optional<UserEntity> findOneByUserIdAndDisabled(Long userId, Boolean disabled);
 }

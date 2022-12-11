@@ -2,6 +2,8 @@ package com.souzadriano.som.controllers;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,7 +30,7 @@ public class UserController {
 	}
 
 	@PostMapping("/users")
-	public User create(@RequestBody User user) {
+	public User create(@Valid @RequestBody User user) {
 		return userService.create(user);
 	}
 
@@ -38,7 +40,7 @@ public class UserController {
 	}
 
 	@PutMapping("/users/{userId}")
-	public User update(@PathVariable Long userId, @RequestBody User user) {
+	public User update(@PathVariable Long userId, @Valid @RequestBody User user) {
 		return userService.update(userId, user);
 	}
 
