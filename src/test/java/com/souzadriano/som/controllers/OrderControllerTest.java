@@ -29,9 +29,11 @@ import com.souzadriano.som.entities.User;
 import com.souzadriano.som.helpers.ItemTestHelper;
 import com.souzadriano.som.helpers.OrderTestHelper;
 import com.souzadriano.som.helpers.UserTestHelper;
+import com.souzadriano.som.repositories.ItemRepository;
 import com.souzadriano.som.repositories.OrderRepository;
 import com.souzadriano.som.repositories.OrderStockMovementRepository;
 import com.souzadriano.som.repositories.StockMovementRepository;
+import com.souzadriano.som.repositories.UserRepository;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -61,12 +63,20 @@ public class OrderControllerTest {
 	
 	@Autowired
 	private OrderStockMovementRepository orderStockMovementRepository;
+	
+	@Autowired
+	private ItemRepository itemRepository;
+	
+	@Autowired
+	private UserRepository userRepository;
 
 	@BeforeEach
 	private void beforeEach() {
 		orderStockMovementRepository.deleteAll();
 		stockMovementRepository.deleteAll();
 		orderRepository.deleteAll();
+		itemRepository.deleteAll();
+		userRepository.deleteAll();
 	}
 
 	@Test

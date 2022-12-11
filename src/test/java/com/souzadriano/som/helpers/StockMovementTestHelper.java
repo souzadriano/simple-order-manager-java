@@ -45,7 +45,7 @@ public class StockMovementTestHelper {
 	}
 
 	public StockMovement createStockMovement2() throws Exception, JsonProcessingException {
-		Item item = itemTestHelper.createItem1();
+		Item item = itemTestHelper.createItem2();
 		return createStockMovement(newStockMovement2(item.getItemId()));
 	}
 

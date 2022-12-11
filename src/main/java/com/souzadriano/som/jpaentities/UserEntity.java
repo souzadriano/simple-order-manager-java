@@ -26,10 +26,12 @@ public class UserEntity implements Serializable {
 
 	@NotNull
 	@NotBlank
+	@Column(unique = true)
 	private String name;
 
 	@NotNull
 	@NotBlank
+	@Column(unique = true)
 	private String email;
 
 	@NotNull

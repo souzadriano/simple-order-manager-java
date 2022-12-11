@@ -26,6 +26,7 @@ public class ItemEntity implements Serializable {
 
 	@NotNull
 	@NotBlank
+	@Column(unique = true)
 	private String name;
 
 	@NotNull

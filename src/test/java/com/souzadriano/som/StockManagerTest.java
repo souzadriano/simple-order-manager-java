@@ -28,9 +28,11 @@ import com.souzadriano.som.helpers.ItemTestHelper;
 import com.souzadriano.som.helpers.OrderTestHelper;
 import com.souzadriano.som.helpers.StockMovementTestHelper;
 import com.souzadriano.som.helpers.UserTestHelper;
+import com.souzadriano.som.repositories.ItemRepository;
 import com.souzadriano.som.repositories.OrderRepository;
 import com.souzadriano.som.repositories.OrderStockMovementRepository;
 import com.souzadriano.som.repositories.StockMovementRepository;
+import com.souzadriano.som.repositories.UserRepository;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -63,12 +65,20 @@ public class StockManagerTest {
 
 	@Autowired
 	private OrderStockMovementRepository orderStockMovementRepository;
+	
+	@Autowired
+	private ItemRepository itemRepository;
+	
+	@Autowired
+	private UserRepository userRepository;
 
 	@BeforeEach
 	private void beforeEach() {
 		orderStockMovementRepository.deleteAll();
 		stockMovementRepository.deleteAll();
 		orderRepository.deleteAll();
+		itemRepository.deleteAll();
+		userRepository.deleteAll();
 	}
 
 	@Test
@@ -247,9 +257,9 @@ public class StockManagerTest {
 	@Test
 	public void createMultipleOrdersWithDoubleMinusOneInStockAndMultiplesItems() throws Exception {
 		Item item1 = itemTestHelper.createItem1();
-		Item item2 = itemTestHelper.createItem1();
+		Item item2 = itemTestHelper.createItem2();
 		User user1 = userTestHelper.createUser1();
-		User user2 = userTestHelper.createUser1();
+		User user2 = userTestHelper.createUser2();
 
 		int stockQuantityCreated1 = (OrderTestHelper.ORDER_1_QUANTITY * 2) - 1;
 		int stockQuantityCreated2 = (OrderTestHelper.ORDER_2_QUANTITY * 2) - 1;

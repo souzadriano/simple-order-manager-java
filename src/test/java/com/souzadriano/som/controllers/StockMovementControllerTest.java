@@ -27,6 +27,7 @@ import com.souzadriano.som.entities.StockMovement;
 import com.souzadriano.som.entities.StockMovementOperation;
 import com.souzadriano.som.helpers.ItemTestHelper;
 import com.souzadriano.som.helpers.StockMovementTestHelper;
+import com.souzadriano.som.repositories.ItemRepository;
 import com.souzadriano.som.repositories.StockMovementRepository;
 
 @SpringBootTest
@@ -45,6 +46,9 @@ public class StockMovementControllerTest {
 
 	@Autowired
 	private ItemTestHelper itemTestHelper;
+	
+	@Autowired
+	private ItemRepository itemRepository;
 
 	@Autowired
 	private StockMovementRepository stockMovementRepository;
@@ -52,6 +56,7 @@ public class StockMovementControllerTest {
 	@BeforeEach
 	private void beforeEach() {
 		stockMovementRepository.deleteAll();
+		itemRepository.deleteAll();
 	}
 
 	@Test
