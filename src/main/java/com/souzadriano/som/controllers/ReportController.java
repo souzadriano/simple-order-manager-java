@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.souzadriano.som.entities.Order;
+import com.souzadriano.som.entities.OrderStockMovements;
 import com.souzadriano.som.entities.StockMovement;
 import com.souzadriano.som.jpaentities.EmailLogEntity;
 import com.souzadriano.som.repositories.EmailLogRepository;
@@ -41,6 +42,11 @@ public class ReportController {
 	@GetMapping("/reports/emails/logs")
 	public List<EmailLogEntity> reportEmailLogs() {
 		return emailLogRepository.findAll(Sort.by("creationDate"));
+	}
+	
+	@GetMapping("/reports/orders-and-stock-movements")
+	public List<OrderStockMovements> ordersAndStockMovements() {
+		return reportService.ordersAndStockMovements();
 	}
 
 	@GetMapping(value = "/reports/write-logs", produces = MediaType.TEXT_PLAIN_VALUE)
